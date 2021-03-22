@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use Auth;
+use Validator;
 
 class AuthController extends Controller
 {
@@ -21,16 +22,33 @@ class AuthController extends Controller
     }
 
     public function logout(Request $request) {
-      $token = $request->bearerToken();
-      $id = User::showUserByToken($token, ["id"])->id;
-      User::loginUsingId(1);
-      Auth::logout();
-      return response()->json([
-        "status" => true
-      ]);
+      $token = $request->query->get("token");
+      $user = User::showUserByToken($token, ["id"]);
+      if ($user && $token != null) {
+        User::loginUsingId($user->id);
+        Auth::logout();
+        return response()->json([
+          "status" => true
+        ]);
+      }
+      else {
+        return response()->json([
+          "status" => false,
+          "errCode" => "tokenNotFound",
+          "errMsg" => "This token is not associated with any user"
+        ]);
+      }
     }
 
     public function register(Request $request) {
+      $validator = Validator::make($request->all(), [
+        'name' => 'required',
+        'email' => 'required|unique:users,email',
+        'password' => 'required'
+      ]);
+      if ($validator->fails()) {
+        return $validator->errors();
+      }
       $stored = User::store(
         $request->name,
         $request->email,
