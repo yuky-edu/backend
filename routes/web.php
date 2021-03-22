@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/debug', function () {
-    dd(bcrypt("host"));
+    return "debug";
 });
 Route::get('/', function () {
     return view('welcome');
