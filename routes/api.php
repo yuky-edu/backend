@@ -37,9 +37,15 @@ Route::group([
 });
 
 Route::group([
-  "prefix" => "hosts"
+  "prefix" => "hosts",
+  "middleware" => "HostMiddleware"
 ], function () {
-  Route::get('/', function(){
-    return "host";
-  });
+  // YclassCategory
+  Route::get('/yclass_categories', 'YclassCategoryController@index');
+
+  // YclassController
+  Route::post('/yclass', 'YclassController@store');
+  Route::get('/yclass/getById/{id}', 'YclassController@getById');
+  Route::get('/yclass/myclass', 'YclassController@myclass');
+  Route::delete('/yclass/delete/{id}', 'YclassController@destroy');
 });
