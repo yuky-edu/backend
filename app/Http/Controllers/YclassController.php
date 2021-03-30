@@ -54,7 +54,7 @@ class YclassController extends Controller
   }
 
   public function destroy(Request $request, $id) {
-    $deleted = Yclass::destroy($id, $request->get("myid"));
+    $deleted = Yclass::deleteClass($id, $request->get("myid"));
     $status = $deleted ? true : false;
     return response()->json([
       "status" => $status

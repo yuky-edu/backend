@@ -16,8 +16,14 @@ Route::post('/test', function(Request $request) {
   return response()->json([
     "status" => true,
     "token" => $token,
-    "bodyt" => $request->all()
+    "body" => $request->all()
   ]);
+});
+
+Route::group([
+  "prefix" => "debug"
+], function () {
+  Route::get('/deleteAllUser', "DebugController@deleteAllUser");
 });
 
 Route::group([
@@ -45,7 +51,12 @@ Route::group([
 
   // YclassController
   Route::post('/yclass', 'YclassController@store');
-  Route::get('/yclass/getById/{id}', 'YclassController@getById');
+  Route::get('/yclass/myclass/{id}', 'YclassController@getById');
   Route::get('/yclass/myclass', 'YclassController@myclass');
   Route::delete('/yclass/delete/{id}', 'YclassController@destroy');
+
+  // User
+  Route::get('/user/myInfo', 'UserController@myInfo');
+  Route::put('/user/updatePassword', 'UserController@updatePassword');
+  Route::put('/user/updatePassword', 'UserController@updatePassword');
 });

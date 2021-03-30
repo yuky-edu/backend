@@ -47,7 +47,47 @@ class User extends Authenticatable
       return Auth::loginUsingId($id);
     }
 
+    static function updateInfo($users_id, $info) {
+      try {
+        $data = User::where([
+          ["id", "=", $users_id]
+        ])->first();
+        foreach ($info as $key => $value) {
+          $data[$key] = $value;
+        }
+        return $data->save();
+      } catch (\Exception $e) {
+        return response()->json([
+          "status" => false,
+          "errCode" => "-",
+          "errMsg" => $e->getMessage()
+        ]);
+      }
+    }
+
+    static function updatePassword($users_id, $pass) {
+      try {
+        $data = User::where([
+          ["id", "=", $users_id]
+        ])->select("password")->first();
+        $data->password = bcrypt($pass);
+        return $data->save();
+      } catch (\Exception $e) {
+        return response()->json([
+          "status" => false,
+          "errCode" => "-",
+          "errMsg" => $e->getMessage()
+        ]);
+      }
+    }
+
+    static function myInfo($users_id) {
+      return User::where([
+        ["id", "=", $users_id]
+      ])->first();
+    }
+
     protected $hidden = [
-        'password', 'remember_token', 'created_at', 'updated_at'
+        'password', 'remember_token', 'created_at', 'updated_at', 'id'
     ];
 }

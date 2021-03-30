@@ -40,11 +40,12 @@ class Yclass extends Model
     return Yclass::with("user", "yclass_category")->select(...$select)->where($where)->get();
   }
 
-  static function _destroy($id, $user) {
+  static function deleteClass($id, $user) {
     $data = Yclass::select("id")->where([
       ["id", "=", $id],
       ["user", "=", $user]
     ])->first();
+    if (!$data) return false;
     return $data->delete();
   }
 }
