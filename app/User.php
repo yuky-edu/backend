@@ -12,7 +12,10 @@ class User extends Authenticatable
     use Notifiable;
 
     protected $fillable = [
-        'name', 'email', 'password',
+        'first_name',
+        'last_name',
+        'email',
+        'password',
     ];
 
     static function login($email, $password){
@@ -29,9 +32,10 @@ class User extends Authenticatable
       return $data->remember_token;
     }
 
-    static function store($name, $email, $password){
+    static function store($first_name, $last_name, $email, $password){
       return User::create([
-        'name' => $name,
+        'first_name' => $first_name,
+        'last_name' => $last_name,
         'email' => $email,
         'password' => bcrypt($password)
       ]);

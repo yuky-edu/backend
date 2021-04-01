@@ -57,6 +57,6 @@ Route::group([
 
   // User
   Route::get('/user/myInfo', 'UserController@myInfo');
-  Route::put('/user/updatePassword', 'UserController@updatePassword');
+  Route::put('/user/updateInfo', 'UserController@updateInfo');
   Route::put('/user/updatePassword', 'UserController@updatePassword');
 });
