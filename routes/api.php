@@ -52,8 +52,10 @@ Route::group([
 
   // YclassController
   Route::post('/yclass', 'YclassController@store');
-  Route::get('/yclass/myclass/{id}', 'YclassController@getById');
+  Route::get('/yclass/myclass/{id}', 'YclassController@getMyId');
+  Route::put('/yclass/myclass/{id}', 'YclassController@updateMyId');
   Route::get('/yclass/myclass', 'YclassController@myclass');
+  Route::get('/yclass/generateCode', 'YclassController@generateCode');
   Route::delete('/yclass/delete/{id}', 'YclassController@destroy');
 
   // User

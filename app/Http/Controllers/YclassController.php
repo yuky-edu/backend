@@ -32,7 +32,7 @@ class YclassController extends Controller
     ]);
   }
 
-  public function getById(Request $request, $id) {
+  public function getMyId(Request $request, $id) {
     $where = [
       ["id", "=", $id],
       ["user", "=", $request->get("myid")]
@@ -58,6 +58,38 @@ class YclassController extends Controller
     $status = $deleted ? true : false;
     return response()->json([
       "status" => $status
+    ]);
+  }
+
+  public function generateCode()
+  {
+    function generateRandomString($length = 5) {
+      $characters = '0123456789abcdefghijklmnopqrstuvwxyz';
+      $charactersLength = strlen($characters);
+      $randomString = '';
+      for ($i = 0; $i < $length; $i++) {
+          $randomString .= $characters[rand(0, $charactersLength - 1)];
+      }
+      return $randomString;
+    }
+    $random = generateRandomString();
+    $data = YClass::select("id")->where([
+      ["code", "=", $random]
+    ])->first();
+    if ($data) {
+      $random = generateRandomString();
+    }
+    return response()->json([
+      "status" => true,
+      "code" => $random
+    ]);
+  }
+
+  public function updateMyId(Request $request, $id)
+  {
+    $updated = YClass::updateData($id, $request->get("myid"), $request->all());
+    return response()->json([
+      "status" => $updated
     ]);
   }
 }

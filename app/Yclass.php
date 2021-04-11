@@ -40,6 +40,25 @@ class Yclass extends Model
     return Yclass::with("user", "yclass_category")->select(...$select)->where($where)->get();
   }
 
+  static function updateData($id, $users_id, $info) {
+    try {
+      $data = YClass::where([
+        ["user", "=", $users_id],
+        ["id", "=", $id]
+      ])->first();
+      foreach ($info as $key => $value) {
+        $data[$key] = $value;
+      }
+      return $data->save();
+    } catch (\Exception $e) {
+      return response()->json([
+        "status" => false,
+        "errCode" => "-",
+        "errMsg" => $e->getMessage()
+      ]);
+    }
+  }
+
   static function deleteClass($id, $user) {
     $data = Yclass::select("id")->where([
       ["id", "=", $id],
