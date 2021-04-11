@@ -32,6 +32,14 @@ class User extends Authenticatable
       return $data->remember_token;
     }
 
+    static function checkToken($token)
+    {
+      $data = User::select("id")->where([
+        ["remember_token", "=", $token]
+      ])->first();
+      return $data ? true : false;
+    }
+
     static function store($first_name, $last_name, $email, $password){
       return User::create([
         'first_name' => $first_name,

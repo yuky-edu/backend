@@ -40,6 +40,7 @@ Route::group([
   Route::post('/login', "AuthController@login");
   Route::get('/logout', "AuthController@logout"); // HostMiddleware
   Route::post('/register', "AuthController@register");
+  Route::get('/checkToken', "AuthController@checkToken");
 });
 
 Route::group([

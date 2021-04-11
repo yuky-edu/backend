@@ -61,4 +61,11 @@ class AuthController extends Controller
         "status" => $status
       ]);
     }
+
+    public function checkToken(Request $request) {
+      $token = $request->query->get("token");
+      return response()->json([
+        "status" => User::checkToken($token)
+      ]);
+    }
 }
