@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 class YclassCategoryController extends Controller
 {
     public function index() {
-      return YclassCategory::getAll();
+      return response()->json([
+        "status" => true,
+        "data" => YclassCategory::getAll()
+      ]);
     }
 }
