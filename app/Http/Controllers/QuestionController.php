@@ -9,12 +9,23 @@ use Validator;
 
 class QuestionController extends Controller
 {
+    public function uploadMedia($media)
+    {
+      $mediaType = $media->getMimeType();
+      $mediaType = explode('/', $mediaType)[0];
+      $mediaName = date('dmyhis').$media->getClientOriginalName();
+      $media->move('media/', $mediaName);
+      return (object) [
+        "mediaName" => $mediaName,
+        "mediaType" => $mediaType
+      ];
+    }
     public function store(Request $request)
     {
       $validator = Validator::make($request->all(), [
         'id_yclass' => 'required|numeric',
         'question' => 'required',
-        'media' => 'mimetypes:video/*,image/*,audio/*|max:10240',
+        'media' => 'mimetypes:video/*,image/*,audio/*|max:5000',
         'correct' => 'required|in:a1,a2,a3,a4,a5,a6',
       ]);
       if ($validator->fails()) {
@@ -34,11 +45,8 @@ class QuestionController extends Controller
       $media = $request->media;
       $inputMediaToDb = null;
       if (isset($media)) {
-        $mediaType = $media->getMimeType();
-        $mediaType = explode('/', $mediaType)[0];
-        $mediaName = date('dmyhis').$media->getClientOriginalName();
-        $media->move('media/', $mediaName);
-        $inputMediaToDb = json_encode([$mediaName, $mediaType]);
+        $uploadMedia = $this->uploadMedia($media);
+        $inputMediaToDb = json_encode([$uploadMedia->mediaName, $uploadMedia->mediaType]);
       }
       $stored = Question::store(
         $request->id_yclass,
@@ -53,6 +61,41 @@ class QuestionController extends Controller
         $request->correct
       );
       $status = $stored ? true : false;
+      return response()->json([
+        "status" => $status
+      ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+      $validator = Validator::make($request->all(), [
+        'question' => 'required',
+        'media' => 'mimetypes:video/*,image/*,audio/*|max:5000',
+        'correct' => 'required|in:a1,a2,a3,a4,a5,a6',
+      ]);
+      if ($validator->fails()) {
+        return $validator->errors();
+      }
+      $media = $request->media;
+      $inputMediaToDb = null;
+      if (isset($media)) {
+        $uploadMedia = $this->uploadMedia($media);
+        $inputMediaToDb = json_encode([$uploadMedia->mediaName, $uploadMedia->mediaType]);
+      }
+      $updated = Question::updateQ(
+        $request->get('myid'),
+        $id,
+        $request->question,
+        $inputMediaToDb,
+        $request->a1,
+        $request->a2,
+        $request->a3,
+        $request->a4,
+        $request->a5,
+        $request->a6,
+        $request->correct
+      );
+      $status = $updated ? true : false;
       return response()->json([
         "status" => $status
       ]);

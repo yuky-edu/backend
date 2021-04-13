@@ -62,6 +62,7 @@ Route::group([
   Route::post('/question', 'QuestionController@store');
   Route::delete('/question/myquestion/{id}', 'QuestionController@destroyMyQ');
   Route::get('/question/myquestion/{id}', 'QuestionController@getQuestionsById');
+  Route::post('/question/myquestion/{id}/update', 'QuestionController@update');
   Route::get('/question/myquestion/yclass/{id_yclass}', 'QuestionController@getQuestionsByIdYClass');
 
   // User

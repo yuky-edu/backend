@@ -50,6 +50,39 @@ class Question extends Model
     ]);
   }
 
+  static function updateQ(
+    $user,
+    $id_q,
+    $question,
+    $media,
+    $a1,
+    $a2,
+    $a3,
+    $a4,
+    $a5,
+    $a6,
+    $correct
+  ) {
+    $data = Question::with('yclass:id,user')->whereHas('yclass', function($q) use($user) {
+      $q->where("user", "=", $user);
+    })->where([
+      ["id", "=", $id_q]
+    ])->first();
+    if (!$data) return false;
+    $data->question = $question;
+    if ($media !== null) {
+      $data->media = $media;
+    }
+    $data->a1 = $a1;
+    $data->a2 = $a2;
+    $data->a3 = $a3;
+    $data->a4 = $a4;
+    $data->a5 = $a5;
+    $data->a6 = $a6;
+    $data->correct = $correct;
+    return $data->save();
+  }
+
   static function destroyMyQ($user, $id)
   {
     $data = Question::with('yclass:id,user')->whereHas('yclass', function($q) use($user) {
