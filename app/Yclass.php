@@ -18,6 +18,10 @@ class Yclass extends Model
   public function user(){
   	return $this->belongsTo('App\User', 'user', 'id');
   }
+  public function questions()
+  {
+    return $this->hasMany("App\Question", "yclass", "id");
+  }
   public function yclass_category(){
   	return $this->belongsTo('App\YclassCategory', 'yclass_category', 'id');
   }
@@ -36,8 +40,12 @@ class Yclass extends Model
     return Yclass::with("user", "yclass_category")->select(...$select)->where($where)->first();
   }
 
+  static function singleWithQ($where = [], $select = []) {
+    return Yclass::with("yclass_category", "questions")->select(...$select)->where($where)->first();
+  }
+
   static function getAll($where = [], $select = []) {
-    return Yclass::with("user", "yclass_category")->select(...$select)->where($where)->get();
+    return Yclass::with("yclass_category")->select(...$select)->where($where)->get();
   }
 
   static function updateData($id, $users_id, $info) {
@@ -67,4 +75,8 @@ class Yclass extends Model
     if (!$data) return false;
     return $data->delete();
   }
+
+  protected $hidden = [
+    'created_at', 'updated_at'
+  ];
 }

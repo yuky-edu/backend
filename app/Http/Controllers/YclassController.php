@@ -32,14 +32,20 @@ class YclassController extends Controller
     ]);
   }
 
-  public function getMyId(Request $request, $id) {
+  public function getMyClassSingle(Request $request, $id) {
     $where = [
       ["id", "=", $id],
       ["user", "=", $request->get("myid")]
     ];
+    if ($request->query->get('withQuestions') == 1) {
+      $data = Yclass::singleWithQ($where);
+    }
+    else {
+      $data = Yclass::single($where);
+    }
     return response()->json([
       "status" => true,
-      "data" => Yclass::single($where)
+      "data" => $data
     ]);
   }
 
@@ -85,8 +91,14 @@ class YclassController extends Controller
     ]);
   }
 
-  public function updateMyId(Request $request, $id)
+  public function updateMyClassSingle(Request $request, $id)
   {
+    $validator = Validator::make($request->all(), [
+      'code' => 'unique:yclasses,code',
+    ]);
+    if ($validator->fails()) {
+      return $validator->errors();
+    }
     $updated = YClass::updateData($id, $request->get("myid"), $request->all());
     return response()->json([
       "status" => $updated

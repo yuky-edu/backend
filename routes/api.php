@@ -50,13 +50,19 @@ Route::group([
   // YclassCategory
   Route::get('/yclass_categories', 'YclassCategoryController@index');
 
-  // YclassController
+  // Yclass
   Route::post('/yclass', 'YclassController@store');
-  Route::get('/yclass/myclass/{id}', 'YclassController@getMyId');
-  Route::put('/yclass/myclass/{id}', 'YclassController@updateMyId');
+  Route::get('/yclass/myclass/{id}', 'YclassController@getMyClassSingle');
+  Route::put('/yclass/myclass/{id}', 'YclassController@updateMyClassSingle');
   Route::get('/yclass/myclass', 'YclassController@myclass');
   Route::get('/yclass/generateCode', 'YclassController@generateCode');
   Route::delete('/yclass/delete/{id}', 'YclassController@destroy');
+
+  // Question
+  Route::post('/question', 'QuestionController@store');
+  Route::delete('/question/myquestion/{id}', 'QuestionController@destroyMyQ');
+  Route::get('/question/myquestion/{id}', 'QuestionController@getQuestionsById');
+  Route::get('/question/myquestion/yclass/{id_yclass}', 'QuestionController@getQuestionsByIdYClass');
 
   // User
   Route::get('/user/myInfo', 'UserController@myInfo');

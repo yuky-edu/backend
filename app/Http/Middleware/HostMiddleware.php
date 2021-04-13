@@ -29,7 +29,8 @@ class HostMiddleware
         } catch (\Exception $e) {
           return response([
             "status" => false,
-            "message" => "Unauthenticated (token wrong/expired)"
+            "errCode" => "unauthorized",
+            "errMsg" => "Unauthenticated (token wrong/expired)"
           ], 403);
         }
 
