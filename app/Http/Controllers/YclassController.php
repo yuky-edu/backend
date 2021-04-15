@@ -79,7 +79,7 @@ class YclassController extends Controller
       return $randomString;
     }
     $random = generateRandomString();
-    $data = YClass::select("id")->where([
+    $data = Yclass::select("id")->where([
       ["code", "=", $random]
     ])->first();
     if ($data) {
@@ -99,7 +99,7 @@ class YclassController extends Controller
     if ($validator->fails()) {
       return $validator->errors();
     }
-    $updated = YClass::updateData($id, $request->get("myid"), $request->all());
+    $updated = Yclass::updateData($id, $request->get("myid"), $request->all());
     return response()->json([
       "status" => $updated
     ]);

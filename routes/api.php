@@ -58,6 +58,12 @@ Route::group([
   Route::get('/yclass/generateCode', 'YclassController@generateCode');
   Route::delete('/yclass/delete/{id}', 'YclassController@destroy');
 
+  // Yclass Session
+  Route::post('/yclass_session', 'YclassSessionController@store');
+  Route::get('/yclass_session/single', 'YclassSessionController@getSingle');
+  Route::put('/yclass_session/{id}', 'YclassSessionController@updateSession');
+  Route::put('/yclass_session/{id}/question', 'YclassSessionController@updateIndexQuestion');
+
   // Question
   Route::post('/question', 'QuestionController@store');
   Route::delete('/question/myquestion/{id}', 'QuestionController@destroyMyQ');

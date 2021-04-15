@@ -16,8 +16,14 @@ class HostMiddleware
      */
     public function handle($request, Closure $next)
     {
+        $unauthorized = response([
+          "status" => false,
+          "errCode" => "unauthorized",
+          "errMsg" => "Unauthenticated (token wrong/expired)"
+        ], 403);
         try {
           $token = $request->bearerToken();
+          if (!$token) return $unauthorized;
           $getUserByToken = User::select("id", "remember_token")->where([
             ["remember_token", "=", $token]
           ])->first();
@@ -27,11 +33,7 @@ class HostMiddleware
             return $next($request);
           }
         } catch (\Exception $e) {
-          return response([
-            "status" => false,
-            "errCode" => "unauthorized",
-            "errMsg" => "Unauthenticated (token wrong/expired)"
-          ], 403);
+          return $unauthorized;
         }
 
     }
