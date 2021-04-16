@@ -22,6 +22,10 @@ class Yclass extends Model
   {
     return $this->hasMany("App\Question", "yclass", "id");
   }
+  public function last_session()
+  {
+    return $this->hasOne("App\YclassSession", "yclass", "id")->latest();
+  }
   public function yclass_category(){
   	return $this->belongsTo('App\YclassCategory', 'yclass_category', 'id');
   }
@@ -44,8 +48,8 @@ class Yclass extends Model
     return Yclass::with("yclass_category", "questions")->select(...$select)->where($where)->first();
   }
 
-  static function getAll($where = [], $select = []) {
-    return Yclass::with("yclass_category")->select(...$select)->where($where)->get();
+  static function getAll($where = []) {
+    return Yclass::with("yclass_category", "last_session")->withCount("questions")->where($where)->get();
   }
 
   static function updateData($id, $users_id, $info) {

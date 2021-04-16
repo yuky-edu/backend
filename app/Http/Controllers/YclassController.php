@@ -53,9 +53,10 @@ class YclassController extends Controller
     $where = [
       ["user", "=", $request->get("myid")]
     ];
+    $data = Yclass::getAll($where);
     return response()->json([
       "status" => true,
-      "data" => Yclass::getAll($where)
+      "data" => $data
     ]);
   }
 

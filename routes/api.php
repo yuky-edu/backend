@@ -70,6 +70,7 @@ Route::group([
   Route::get('/question/myquestion/{id}', 'QuestionController@getQuestionsById');
   Route::post('/question/myquestion/{id}/update', 'QuestionController@update');
   Route::get('/question/myquestion/yclass/{id_yclass}', 'QuestionController@getQuestionsByIdYClass');
+  Route::get('/question/myquestion/count/all', 'QuestionController@countMyQuestion');
 
   // User
   Route::get('/user/myInfo', 'UserController@myInfo');

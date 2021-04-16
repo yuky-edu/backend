@@ -119,4 +119,15 @@ class QuestionController extends Controller
     {
       return Question::getQuestionsById($request->get('myid'), $id);
     }
+
+    public function countMyQuestion(Request $request)
+    {
+      $count = Question::with('yclass:id,user')->whereHas('yclass', function($q) use($request){
+        $q->where('user', '=', $request->get('myid'));
+      })->select('id')->count();
+      return response()->json([
+        "status" => true,
+        "count" => $count
+      ]);
+    }
 }

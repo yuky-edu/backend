@@ -21,7 +21,7 @@ class Question extends Model
 
   public function yclass()
   {
-    return $this->belongsTo("App\YClass", "yclass", "id");
+    return $this->belongsTo("App\Yclass", "yclass", "id");
   }
 
   static function store(
