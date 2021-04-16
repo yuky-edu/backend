@@ -25,6 +25,8 @@ class QuestionController extends Controller
       $validator = Validator::make($request->all(), [
         'id_yclass' => 'required|numeric',
         'question' => 'required',
+        'a1' => 'required',
+        'a2' => 'required',
         'media' => 'mimetypes:video/*,image/*,audio/*|max:5000',
         'correct' => 'required|in:a1,a2,a3,a4,a5,a6',
       ]);
@@ -71,6 +73,8 @@ class QuestionController extends Controller
       $validator = Validator::make($request->all(), [
         'question' => 'required',
         'media' => 'mimetypes:video/*,image/*,audio/*|max:5000',
+        'a1' => 'required',
+        'a2' => 'required',
         'correct' => 'required|in:a1,a2,a3,a4,a5,a6',
       ]);
       if ($validator->fails()) {
