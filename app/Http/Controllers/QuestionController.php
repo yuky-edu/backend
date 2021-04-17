@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Question;
-use App\YClass;
+use App\Yclass;
 use Validator;
 
 class QuestionController extends Controller
@@ -33,7 +33,7 @@ class QuestionController extends Controller
       if ($validator->fails()) {
         return $validator->errors();
       }
-      $classBelonging = YClass::select("id")->where([
+      $classBelonging = Yclass::select("id")->where([
         ["id", "=", $request->id_yclass],
         ["user", "=", $request->get('myid')]
       ])->first();
