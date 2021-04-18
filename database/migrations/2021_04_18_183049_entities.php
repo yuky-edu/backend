@@ -17,7 +17,7 @@ class Entities extends Migration
             $table->id();
             $table->unsignedBigInteger("yclass");
             $table->text("question")->nullable()->default(null);
-            $table->string("media_question")->nullable()->default(null);
+            $table->string("media")->nullable()->default(null);
             $table->string("a1")->nullable()->default(null);
             $table->string("a2")->nullable()->default(null);
             $table->string("a3")->nullable()->default(null);
@@ -26,7 +26,6 @@ class Entities extends Migration
             $table->string("a6")->nullable()->default(null);
             $table->enum("correct", ["a1", "a2", "a3", "a4", "a5", "a6"])->nullable()->default(null);
             $table->text("theory")->nullable()->default(null);
-            $table->string("media_theory")->nullable()->default(null);
             $table->enum("type", ["q", "t"]);
             $table->timestamps();
 

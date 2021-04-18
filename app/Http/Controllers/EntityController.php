@@ -64,6 +64,14 @@ class EntityController extends Controller
       $request->correct
     );
     $status = $stored ? true : false;
+    if ($status) {
+      if (isset($stored["media"])) {
+        $baseURL = env('APP_URL').'/media/question';
+        $decodeMedia = json_decode($stored["media"]);
+        $decodeMedia[0] = $baseURL.'/'.$decodeMedia[0];
+        $stored["media"] = $decodeMedia;
+      }
+    }
     return response()->json([
       "status" => $status,
       "data" => $stored
@@ -103,6 +111,14 @@ class EntityController extends Controller
       $inputMediaToDb
     );
     $status = $stored ? true : false;
+    if ($status) {
+      if (isset($stored["media"])) {
+        $baseURL = env('APP_URL').'/media/question';
+        $decodeMedia = json_decode($stored["media"]);
+        $decodeMedia[0] = $baseURL.'/'.$decodeMedia[0];
+        $stored["media"] = $decodeMedia;
+      }
+    }
     return response()->json([
       "status" => $status,
       "data" => $stored
@@ -121,6 +137,39 @@ class EntityController extends Controller
   public function getEntityByIdYClass(Request $request, $id_yclass)
   {
     $data = Entity::getEntityByIdYClass($request->get('myid'), $id_yclass);
+    $returnData = [];
+    foreach ($data as $value) {
+      if (isset($value["media"])) {
+        if ($value["type"] == 'q') {
+          $baseURL = env('APP_URL').'/media/question';
+        }
+        elseif ($value["type"] == 't') {
+          $baseURL = env('APP_URL').'/media/theory';
+        }
+        $value["media"] = json_decode($value["media"]);
+        $value["media"][0] = $baseURL.'/'.$value["media"][0];
+      }
+      array_push($returnData, $value);
+    }
+    return response()->json([
+      "status" => true,
+      "data" => $returnData
+    ]);
+  }
+
+  public function getSingleMyEntity(Request $request, $id)
+  {
+    $data = Entity::getSingleMyEntity($request->get('myid'), $id);
+    if (isset($data["media"])) {
+      if ($data["type"] == 'q') {
+        $baseURL = env('APP_URL').'/media/question';
+      }
+      elseif ($data["type"] == 't') {
+        $baseURL = env('APP_URL').'/media/theory';
+      }
+      $data["media"] = json_decode($data["media"]);
+      $data["media"][0] = $baseURL.'/'.$data["media"][0];
+    }
     return response()->json([
       "status" => true,
       "data" => $data
@@ -210,15 +259,6 @@ class EntityController extends Controller
     $status = $updated ? true : false;
     return response()->json([
       "status" => $status
-    ]);
-  }
-
-  public function getSingleMyEntity(Request $request, $id)
-  {
-    $data = Entity::getSingleMyEntity($request->get('myid'), $id);;
-    return response()->json([
-      "status" => true,
-      "data" => $data
     ]);
   }
 }

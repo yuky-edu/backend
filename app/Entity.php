@@ -9,7 +9,7 @@ class Entity extends Model
   protected $fillable = [
     'yclass',
     'question',
-    'media_question',
+    'media',
     'a1',
     'a2',
     'a3',
@@ -18,7 +18,6 @@ class Entity extends Model
     'a6',
     'correct',
     'theory',
-    'media_theory',
     'type'
   ];
 
@@ -42,7 +41,7 @@ class Entity extends Model
     return Entity::create([
       'yclass' => $yclass,
       'question' => $question,
-      'media_question' => $media,
+      'media' => $media,
       'a1' => $a1,
       'a2' => $a2,
       'a3' => $a3,
@@ -62,20 +61,9 @@ class Entity extends Model
     return Entity::create([
       'yclass' => $yclass,
       'theory' => $theory,
-      'media_theory' => $media,
+      'media' => $media,
       'type' => 't'
     ]);
-  }
-
-  static function getSingleMyEntity($user, $id)
-  {
-    $data = Entity::with('yclass:id,user')->whereHas('yclass', function($q) use($user) {
-      $q->where('user', '=', $user);
-    })->where('id', '=', $id)->first();
-    if (!$data) return false;
-    $data = json_decode(json_encode($data),true);
-    $data = array_filter($data);
-    return $data;
   }
 
   static function update_question(
@@ -100,7 +88,7 @@ class Entity extends Model
     if (!$data) return false;
     $data->question = $question;
     if ($media !== null) {
-      $data->media_question = $media;
+      $data->media = $media;
     }
     $data->a1 = $a1;
     $data->a2 = $a2;
@@ -127,7 +115,7 @@ class Entity extends Model
     if (!$data) return false;
     $data->theory = $theory;
     if ($media !== null) {
-      $data->media_theory = $media;
+      $data->media = $media;
     }
     return $data->save();
   }
@@ -147,15 +135,26 @@ class Entity extends Model
   {
     $data = Entity::with('yclass:id,user')->whereHas('yclass', function($q) use($user, $id_yclass) {
       $q->where('user', '=', $user);
-      $q->where('id', '=', $id_yclass);
+      $q->where('yclass', '=', $id_yclass);
     })->get();
     $data = json_decode(json_encode($data),true);
-    $data =array_map('array_filter',$data);
-    $data= array_map(function ($data){
-                if(!in_array(null,$data))
-                    return $data;
+    $data = array_map('array_filter',$data);
+    $data = array_map(function ($data){
+            if(!in_array(null,$data))
+                return $data;
             }, $data);
-    $data=array_filter($data);
+    $data = array_filter($data);
+    return $data;
+  }
+
+  static function getSingleMyEntity($user, $id)
+  {
+    $data = Entity::with('yclass:id,user')->whereHas('yclass', function($q) use($user) {
+      $q->where('user', '=', $user);
+    })->where('id', '=', $id)->first();
+    if (!$data) return false;
+    $data = json_decode(json_encode($data),true);
+    $data = array_filter($data);
     return $data;
   }
 }
