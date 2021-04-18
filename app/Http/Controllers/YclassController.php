@@ -37,12 +37,7 @@ class YclassController extends Controller
       ["id", "=", $id],
       ["user", "=", $request->get("myid")]
     ];
-    if ($request->query->get('withQuestions') == 1) {
-      $data = Yclass::singleWithQ($where);
-    }
-    else {
-      $data = Yclass::single($where);
-    }
+    $data = Yclass::single($where);
     return response()->json([
       "status" => true,
       "data" => $data

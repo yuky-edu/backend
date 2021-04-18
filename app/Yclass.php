@@ -18,9 +18,9 @@ class Yclass extends Model
   public function user(){
   	return $this->belongsTo('App\User', 'user', 'id');
   }
-  public function questions()
+  public function entities()
   {
-    return $this->hasMany("App\Question", "yclass", "id");
+    return $this->hasMany("App\Entity", "yclass", "id");
   }
   public function last_session()
   {
@@ -45,11 +45,11 @@ class Yclass extends Model
   }
 
   static function singleWithQ($where = [], $select = []) {
-    return Yclass::with("yclass_category", "questions")->select(...$select)->where($where)->first();
+    return Yclass::with("yclass_category", "entities")->select(...$select)->where($where)->first();
   }
 
   static function getAll($where = []) {
-    return Yclass::with("yclass_category", "last_session")->withCount("questions")->where($where)->get();
+    return Yclass::with("yclass_category", "last_session")->withCount("entities")->where($where)->get();
   }
 
   static function updateData($id, $users_id, $info) {
