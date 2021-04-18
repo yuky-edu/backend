@@ -72,6 +72,17 @@ Route::group([
   Route::get('/question/myquestion/yclass/{id_yclass}', 'QuestionController@getQuestionsByIdYClass');
   Route::get('/question/myquestion/count/all', 'QuestionController@countMyQuestion');
 
+  // Entity
+  Route::post('/entity/question', 'EntityController@store_question');
+  Route::post('/entity/theory', 'EntityController@store_theory');
+  Route::delete('/entity/{id}', 'EntityController@destroyMyE');
+  Route::get('/entity/myentity/{id}', 'EntityController@getSingleMyEntity');
+  Route::get('/entity/myentity/yclass/{id_yclass}', 'EntityController@getEntityByIdYClass');
+  Route::get('/entity/question/myquestion/count/all', 'EntityController@countMyQuestion');
+  Route::get('/entity/theory/mytheory/count/all', 'EntityController@countMyTheory');
+  Route::post('/entity/theory/mytheory/{id}/update', 'EntityController@update_theory');
+  Route::post('/entity/question/myquestion/{id}/update', 'EntityController@update_question');
+
   // User
   Route::get('/user/myInfo', 'UserController@myInfo');
   Route::put('/user/updateInfo', 'UserController@updateInfo');

@@ -11,6 +11,7 @@ class YclassSession extends Model
       'yclass',
       'index_question',
       'isExplain',
+      'ws_channel',
       'played'
     ];
 
@@ -22,7 +23,8 @@ class YclassSession extends Model
     static function store($yclass)
     {
       return YclassSession::create([
-        'yclass' => $yclass
+        'yclass' => $yclass,
+        'ws_channel' => md5(date("dmyhisu"))
       ]);
     }
 

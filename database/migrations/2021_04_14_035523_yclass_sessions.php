@@ -19,6 +19,7 @@ class YclassSessions extends Migration
             $table->integer('index_question')->default(0);
             $table->enum('isExplain', [0, 1])->default(0);
             $table->enum('played', [0, 1])->default(1);
+            $table->string("ws_channel")->unique();
             $table->timestamps();
 
             $table->foreign("yclass")->references("id")->on("yclasses")->onDelete("cascade");

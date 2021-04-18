@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class Questions extends Migration
+class Entities extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,21 @@ class Questions extends Migration
      */
     public function up()
     {
-        Schema::create('questions', function (Blueprint $table) {
+        Schema::create('entities', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger("yclass");
-            $table->string("question");
-            $table->text("media")->nullable()->default(null);
-            $table->string("a1");
-            $table->string("a2");
+            $table->text("question")->nullable()->default(null);
+            $table->string("media_question")->nullable()->default(null);
+            $table->string("a1")->nullable()->default(null);
+            $table->string("a2")->nullable()->default(null);
             $table->string("a3")->nullable()->default(null);
             $table->string("a4")->nullable()->default(null);
             $table->string("a5")->nullable()->default(null);
             $table->string("a6")->nullable()->default(null);
-            $table->enum("correct", ["a1", "a2", "a3", "a4", "a5", "a6"]);
+            $table->enum("correct", ["a1", "a2", "a3", "a4", "a5", "a6"])->nullable()->default(null);
+            $table->text("theory")->nullable()->default(null);
+            $table->string("media_theory")->nullable()->default(null);
+            $table->enum("type", ["q", "t"]);
             $table->timestamps();
 
             $table->foreign("yclass")->references("id")->on("yclasses")->onDelete("cascade");
@@ -38,6 +41,6 @@ class Questions extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('questions');
+        Schema::dropIfExists('entities');
     }
 }
