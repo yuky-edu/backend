@@ -64,7 +64,8 @@ class QuestionController extends Controller
       );
       $status = $stored ? true : false;
       return response()->json([
-        "status" => $status
+        "status" => $status,
+        "data" => $stored
       ]);
     }
 
