@@ -64,14 +64,6 @@ Route::group([
   Route::put('/yclass_session/{id}', 'YclassSessionController@updateSession');
   Route::put('/yclass_session/{id}/question', 'YclassSessionController@updateIndexQuestion');
 
-  // Question
-  Route::post('/question', 'QuestionController@store');
-  Route::delete('/question/myquestion/{id}', 'QuestionController@destroyMyQ');
-  Route::get('/question/myquestion/{id}', 'QuestionController@getQuestionsById');
-  Route::post('/question/myquestion/{id}/update', 'QuestionController@update');
-  Route::get('/question/myquestion/yclass/{id_yclass}', 'QuestionController@getQuestionsByIdYClass');
-  Route::get('/question/myquestion/count/all', 'QuestionController@countMyQuestion');
-
   // Entity
   Route::post('/entity/question', 'EntityController@store_question');
   Route::post('/entity/theory', 'EntityController@store_theory');
