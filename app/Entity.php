@@ -131,11 +131,16 @@ class Entity extends Model
     return $data->delete();
   }
 
-  static function getEntityByIdYClass($user, $id_yclass)
+  static function getEntityBy($user, $by)
   {
-    $data = Entity::with('yclass:id,user')->whereHas('yclass', function($q) use($user, $id_yclass) {
+    $data = Entity::with('yclass:id,user')->whereHas('yclass', function($q) use($user, $by) {
       $q->where('user', '=', $user);
-      $q->where('yclass', '=', $id_yclass);
+      if (isset($by["code"])) {
+        $q->where('code', '=', $by["code"]);
+      }
+      if (isset($by["id_yclass"])) {
+        $q->where('id', '=', $by["id_yclass"]);
+      }
     })->get();
     $data = json_decode(json_encode($data),true);
     $data = array_map('array_filter',$data);

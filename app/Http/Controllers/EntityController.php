@@ -134,9 +134,10 @@ class EntityController extends Controller
     ]);
   }
 
-  public function getEntityByIdYClass(Request $request, $id_yclass)
+  public function getEntityBy(Request $request)
   {
-    $data = Entity::getEntityByIdYClass($request->get('myid'), $id_yclass);
+    $by = $request->query->all();
+    $data = Entity::getEntityBy($request->get('myid'), $by);
     $returnData = [];
     foreach ($data as $value) {
       if (isset($value["media"])) {
