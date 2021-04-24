@@ -11,8 +11,7 @@ class Yclass extends Model
     'yclass_category',
     'code',
     'title',
-    'description',
-    'status'
+    'description'
   ];
 
   public function user(){
@@ -29,14 +28,13 @@ class Yclass extends Model
   public function yclass_category(){
   	return $this->belongsTo('App\YclassCategory', 'yclass_category', 'id');
   }
-  static function store($users_id, $yclass_categories_id, $code, $title, $description, $status) {
+  static function store($users_id, $yclass_categories_id, $code, $title, $description) {
     return Yclass::create([
       'user' => $users_id,
       'yclass_category' => $yclass_categories_id,
       'code' => $code,
       'title' => $title,
-      'description' => $description,
-      'status' => $status
+      'description' => $description
     ]);
   }
 

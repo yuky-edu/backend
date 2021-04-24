@@ -16,9 +16,8 @@ class YclassSessions extends Migration
         Schema::create('yclass_sessions', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('yclass');
-            $table->integer('index_question')->default(0);
-            $table->enum('isExplain', [0, 1])->default(0);
-            $table->enum('played', [0, 1])->default(1);
+            $table->integer('index_entity')->default(0);
+            $table->enum('status', ['off', 'wait', 'playing'])->default('wait');
             $table->string("ws_channel")->unique();
             $table->timestamps();
 

@@ -29,8 +29,15 @@ Route::group([
 Route::group([
   "prefix" => "plays"
 ], function () {
-  Route::get('/', function(){
-    return "plays";
+  // Player
+  Route::post('/player/join', 'PlayerController@joinClass');
+
+  Route::group([
+    "middleware" => "PlayerMiddleware"
+  ], function() {
+    // Player
+    Route::post('/player/update', 'PlayerController@updatePlayer');
+    Route::get('/player/countMyFriend', 'PlayerController@countMyFriend');
   });
 });
 
@@ -62,7 +69,7 @@ Route::group([
   Route::post('/yclass_session', 'YclassSessionController@store');
   Route::get('/yclass_session/single', 'YclassSessionController@getSingle');
   Route::put('/yclass_session/{id}', 'YclassSessionController@updateSession');
-  Route::put('/yclass_session/{id}/question', 'YclassSessionController@updateIndexQuestion');
+  Route::put('/yclass_session/{id}/entity', 'YclassSessionController@updateIndexEntity');
 
   // Entity
   Route::post('/entity/question', 'EntityController@store_question');
@@ -79,4 +86,8 @@ Route::group([
   Route::get('/user/myInfo', 'UserController@myInfo');
   Route::put('/user/updateInfo', 'UserController@updateInfo');
   Route::put('/user/updatePassword', 'UserController@updatePassword');
+
+  // Player
+  Route::delete('/player/{id}', 'PlayerController@kick');
+  Route::get('/player/session/{id_session}', 'PlayerController@getPlayersBySession');
 });

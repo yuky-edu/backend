@@ -30,7 +30,7 @@ class YclassSessionController extends Controller
       }
       $checkSession = YclassSession::select("id")->where([
         ["yclass", "=", $request->id_yclass],
-        ["played", "=", "1"]
+        ["status", "=", "1"]
       ])->orderBy('id', 'DESC')->first();
       if ($checkSession) {
         return response()->json([
@@ -77,8 +77,7 @@ class YclassSessionController extends Controller
     public function updateSession(Request $request, $id)
     {
       $validator = Validator::make($request->all(), [
-        'played' => 'in:0,1',
-        'isExplain' => 'in:0,1'
+        'status' => 'in:off,wait,on'
       ]);
       if ($validator->fails()) {
         return $validator->errors();
@@ -89,12 +88,12 @@ class YclassSessionController extends Controller
      ]);
     }
 
-    public function updateIndexQuestion(Request $request, $id)
+    public function updateIndexEntity(Request $request, $id)
     {
       $validator = Validator::make($request->all(), [
-        'nextQuestion' => 'required'
+        'nextEntity' => 'required'
       ]);
-      $updated = YclassSession::updateIndexQuestion($request->get('myid'), $id, $request->nextQuestion);
+      $updated = YclassSession::updateIndexEntity($request->get('myid'), $id, $request->nextEntity);
       return response()->json($updated);
     }
 }

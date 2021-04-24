@@ -23,8 +23,7 @@ class YclassController extends Controller
       $request->category,
       $request->code,
       $request->title,
-      $request->description,
-      '0'
+      $request->description
     );
     $status = $stored ? true : false;
     return response()->json([

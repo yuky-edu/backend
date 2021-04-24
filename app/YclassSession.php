@@ -3,16 +3,15 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Question;
+use App\Entity;
 
 class YclassSession extends Model
 {
     protected $fillable = [
       'yclass',
-      'index_question',
-      'isExplain',
+      'index_entity',
       'ws_channel',
-      'played'
+      'status'
     ];
 
     public function yclass()
@@ -43,12 +42,11 @@ class YclassSession extends Model
         ["id", "=", $id]
       ])->first();
       if (!$data) return false;
-      if(array_key_exists("played", $r)) $data->played = (string) $r["played"];
-      if(array_key_exists("isExplain", $r)) $data->isExplain = (string) $r["isExplain"];
+      if(array_key_exists("status", $r)) $data->status = (string) $r["status"];
       return $data->save();
     }
 
-    static function updateIndexQuestion($user, $id, $q)
+    static function updateIndexEntity($user, $id, $q)
     {
       $data = YclassSession::with('yclass:id,user')->whereHas('yclass', function($q) use($user) {
         $q->where("user", "=", $user);
@@ -56,12 +54,12 @@ class YclassSession extends Model
         ["id", "=", $id]
       ])->first();
       if (!$data) return false;
-      $totalQ = Question::where([
+      $totalQ = Entity::where([
         ["yclass", "=", $data->yclass]
       ])->select('id')->count();
       $totalIndexQ = $totalQ-1;
       if (is_bool($q)) {
-        $nextIndex = $data->index_question+1;
+        $nextIndex = $data->index_entity+1;
       }
       else {
         $nextIndex = $q;
@@ -70,10 +68,10 @@ class YclassSession extends Model
         return (object) [
           "status" => false,
           "errCode" => "end",
-          "errMsg" => "theres no question anymore in this yclass"
+          "errMsg" => "theres no entity anymore in this yclass"
         ];
       }
-      $data->index_question = $nextIndex;
+      $data->index_entity = $nextIndex;
       return (object) [
         "status" => $data->save(),
         "index" => $nextIndex

@@ -20,7 +20,6 @@ class Yclass extends Migration
           $table->string("code")->unique();
           $table->string("title");
           $table->string("description");
-          $table->enum("status", [0, 1]); // [draft, publish]
           $table->timestamps();
 
           $table->foreign("user")->references("id")->on("users")->onDelete("cascade");
