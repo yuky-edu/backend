@@ -16,6 +16,7 @@ class ClassCategory extends Migration
         Schema::create('yclass_categories', function (Blueprint $table) {
           $table->id();
           $table->string("name");
+          $table->text("image")->nullable()->default(null);
           $table->timestamps();
         });
     }

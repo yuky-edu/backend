@@ -28,22 +28,27 @@ class YclassSessionController extends Controller
           "errMsg" => "yclass with this id not found or you cant access this yclass"
         ]);
       }
-      $checkSession = YclassSession::select("id")->where([
+      $checkSession = YclassSession::select("id", "ws_channel")->where([
         ["yclass", "=", $request->id_yclass],
-        ["status", "=", "1"]
+        ["status", "!=", "off"]
       ])->orderBy('id', 'DESC')->first();
       if ($checkSession) {
         return response()->json([
-          "status" => false,
-          "errCode" => "sessionIsPlayed",
-          "errMsg" => "cannot create this session. yclass session already running on id ".$checkSession->id,
-          "id_session" => $checkSession->id
+          "status" => true,
+          "data" => [
+            "id" => $checkSession->id,
+            "ws_channel" => $checkSession->ws_channel
+          ]
         ]);
       }
       $stored = YclassSession::store($request->id_yclass);
       $status = $stored ? true : false;
       return response()->json([
-        "status" => $status
+        "status" => $status,
+        "data" => [
+          "id" => $stored->id,
+          "ws_channel" => $stored->ws_channel
+        ]
       ]);
     }
 
@@ -77,7 +82,7 @@ class YclassSessionController extends Controller
     public function updateSession(Request $request, $id)
     {
       $validator = Validator::make($request->all(), [
-        'status' => 'in:off,wait,on'
+        'status' => 'in:off,wait,on_mode_block,on_mode_open'
       ]);
       if ($validator->fails()) {
         return $validator->errors();

@@ -31,6 +31,7 @@ Route::group([
 ], function () {
   // Player
   Route::post('/player/join', 'PlayerController@joinClass');
+  Route::post('/player/register', 'PlayerController@register');
 
   Route::group([
     "middleware" => "PlayerMiddleware"
@@ -59,7 +60,7 @@ Route::group([
 
   // Yclass
   Route::post('/yclass', 'YclassController@store');
-  Route::get('/yclass/myclass/{id}', 'YclassController@getMyClassSingle');
+  Route::get('/yclass/myclass/single', 'YclassController@getMyClassSingle');
   Route::put('/yclass/myclass/{id}', 'YclassController@updateMyClassSingle');
   Route::get('/yclass/myclass', 'YclassController@myclass');
   Route::get('/yclass/generateCode', 'YclassController@generateCode');

@@ -28,6 +28,9 @@ class Yclass extends Model
   public function yclass_category(){
   	return $this->belongsTo('App\YclassCategory', 'yclass_category', 'id');
   }
+  public function category(){
+  	return $this->belongsTo('App\YclassCategory', 'yclass_category', 'id');
+  }
   static function store($users_id, $yclass_categories_id, $code, $title, $description) {
     return Yclass::create([
       'user' => $users_id,
@@ -39,7 +42,7 @@ class Yclass extends Model
   }
 
   static function single($where = [], $select = []) {
-    return Yclass::with("user", "yclass_category")->select(...$select)->where($where)->first();
+    return Yclass::with("user", "category")->select(...$select)->where($where)->first();
   }
 
   static function singleWithQ($where = [], $select = []) {

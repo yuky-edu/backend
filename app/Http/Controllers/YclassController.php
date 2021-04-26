@@ -31,12 +31,18 @@ class YclassController extends Controller
     ]);
   }
 
-  public function getMyClassSingle(Request $request, $id) {
+  public function getMyClassSingle(Request $request) {
     $where = [
-      ["id", "=", $id],
       ["user", "=", $request->get("myid")]
     ];
+    if ($request->query->get('id')) {
+      array_push($where, ["id", "=", $request->query->get('id')]);
+    }
+    if ($request->query->get('code')) {
+      array_push($where, ["code", "=", $request->query->get('code')]);
+    }
     $data = Yclass::single($where);
+    $data->category->image = env('APP_URL').'/img/category/'.$data->category->image;
     return response()->json([
       "status" => true,
       "data" => $data

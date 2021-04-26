@@ -17,7 +17,10 @@ class PlayerController extends Controller
         $q->where('user', '=', $user);
       })->where([
         ["yclass_session", "=", $id_session]
-      ])->select('id', 'yclass_session', 'name', 'photo')->get();
+      ])->orderBy('id', 'DESC')->select('id', 'yclass_session', 'name', 'avatar')->get();
+      foreach ($data as $value) {
+        $value->avatar = env('APP_URL').'/img/avatar/'.$value->avatar;
+      }
       return response()->json([
         "status" => true,
         "data" => $data
@@ -25,13 +28,30 @@ class PlayerController extends Controller
     }
 
     // Play
-    public function register($name, $session_id)
+    public function register(Request $request)
     {
-      $photo = ['avatar1.png', 'avatar2.png', 'avatar3.png', 'avatar4.png', 'avatar5.png'];
-      $photo = $photo[array_rand($photo)];
-      $stored = Player::register($session_id, $name, $photo);
+      $validator = Validator::make($request->all(), [
+        'name' => 'required',
+        'id_session' => 'required',
+        'avatar' => 'required'
+      ]);
+      if ($validator->fails()) {
+        return $validator->errors();
+      }
+      $photo = $request->avatar;
+      $type = $request->avatar_type;
+      if ($type == 'custom') {
+        $photoName = date('dmyhis').$photo->getClientOriginalName();
+        $photo->move('img/avatar', $photoName);
+        $photo = $photoName;
+      }
+      $stored = Player::register($request->id_session, $request->name, $photo);
       $status = $stored ? true : false;
-      return $stored;
+      $stored->avatar = env('APP_URL').'/img/avatar/'.$stored->avatar;
+      return response()->json([
+        "status" => $status,
+        "data" => $stored
+      ]);
     }
 
     public function kick(Request $request, $id)
@@ -45,8 +65,7 @@ class PlayerController extends Controller
     public function joinClass(Request $request)
     {
       $validator = Validator::make($request->all(), [
-        'code' => 'required',
-        'playerName' => 'required'
+        'code' => 'required'
       ]);
       if ($validator->fails()) {
         return $validator->errors();
@@ -55,7 +74,20 @@ class PlayerController extends Controller
       $dataYclass = Yclass::where([
         ['code', '=', $code]
       ])->with('last_session', 'yclass_category')->first();
-      switch ($dataYclass->last_session->status) {
+      if (!$dataYclass) {
+        return response()->json([
+          "status" => false,
+          "errCode" => "notFound",
+          "errMsg" => "class with this code not found"
+        ]);
+      }
+      if ($dataYclass->last_session == null) {
+        $status = 'off';
+      }
+      else {
+        $status = $dataYclass->last_session->status;
+      }
+      switch ($status) {
         case 'off':
         return response()->json([
           "status" => false,
@@ -63,22 +95,20 @@ class PlayerController extends Controller
           "errMsg" => "this class session is off"
         ]);
           break;
-        case 'playing':
+        case 'on_mode_block':
           return response()->json([
             "status" => false,
-            "errCode" => "playing",
-            "errMsg" => "this class session is already played"
+            "errCode" => "block",
+            "errMsg" => "this class session is already played in block mode"
           ]);
           break;
       }
       if ($dataYclass) {
-        $player = $this->register($request->playerName, $dataYclass->last_session->id);
-        $player->photo = env('APP_URL').'/img/avatar/'.$player->photo;
+        // $player = $this->register($request->playerName, $dataYclass->last_session->id);
         return response()->json([
           "status" => true,
           "data" => [
-            "yclass" => $dataYclass,
-            "player" => $player
+            "yclass" => $dataYclass
           ]
         ]);
       }
@@ -91,13 +121,13 @@ class PlayerController extends Controller
     {
       $validator = Validator::make($request->all(), [
         'name' => 'required',
-        'photo' => 'mimetypes:image/*'
+        'avatar' => 'mimetypes:image/*'
       ]);
       if ($validator->fails()) {
         return $validator->errors();
       }
-      if ($request->has('photo')) {
-        $photoFile = $request->photo;
+      if ($request->has('avatar')) {
+        $photoFile = $request->avatar;
         $photo = date('dmyhis').$photoFile->getClientOriginalName();
         $photoFile->move('img/avatar', $photo);
         $request->merge(["photoName" => $photo]);

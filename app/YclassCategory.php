@@ -7,11 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class YclassCategory extends Model
 {
   protected $fillable = [
-    'name'
+    'name', 'image'
   ];
 
   static function getAll() {
-    return YclassCategory::orderBy("name", "ASC")->get();
+    $data = YclassCategory::get();
+    foreach ($data as $value) {
+      $value->image = env('APP_URL').'/img/category/'.$value->image;
+    }
+    return $data;
   }
 
   protected $hidden = [

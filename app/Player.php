@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Player extends Model
 {
   protected $fillable = [
-    	'yclass_session',	'name',	'photo',	'token'
+    	'yclass_session',	'name',	'avatar',	'token'
   ];
 
   public function yclass_session()
@@ -15,12 +15,12 @@ class Player extends Model
     return $this->belongsTo('App\YclassSession', 'yclass_session', 'id');
   }
 
-  static function register($yclass_session_id, $name, $photo)
+  static function register($yclass_session_id, $name, $avatar)
   {
     return Player::create([
       'yclass_session' => $yclass_session_id,
       'name' => $name,
-      'photo' => $photo,
+      'avatar' => $avatar,
       'token' => md5($yclass_session_id.date('dmyhis'))
     ]);
   }
@@ -40,10 +40,10 @@ class Player extends Model
   {
     $data = Player::where([
       ["id", "=", $id]
-    ])->select('id', 'name', 'photo')->first();
+    ])->select('id', 'name', 'avatar')->first();
     if (!$data) return false;
     if (isset($key['name'])) $data->name = $key['name'];
-    if (isset($key['photoName'])) $data->photo = $key['photoName'];
+    if (isset($key['photoName'])) $data->avatar = $key['photoName'];
     return $data->save();
   }
 }
