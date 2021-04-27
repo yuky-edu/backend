@@ -50,7 +50,7 @@ class Yclass extends Model
   }
 
   static function getAll($where = []) {
-    return Yclass::with("yclass_category", "last_session")->withCount("entities")->where($where)->get();
+    return Yclass::with("yclass_category", "last_session")->withCount("entities")->where($where)->orderBy('id', 'DESC')->get();
   }
 
   static function updateData($id, $users_id, $info) {
