@@ -28,7 +28,7 @@ class EntityController extends Controller
       'question' => 'required',
       'a1' => 'required',
       'a2' => 'required',
-      'media' => 'mimetypes:video/*,image/*,audio/*|max:5000',
+      'media' => 'mimetypes:video/*,image/*,audio/*',
       'correct' => 'required|in:a1,a2,a3,a4,a5,a6',
     ]);
     if ($validator->fails()) {
@@ -83,7 +83,7 @@ class EntityController extends Controller
     $validator = Validator::make($request->all(), [
       'id_yclass' => 'required|numeric',
       'theory' => 'required',
-      'media' => 'mimetypes:video/*,image/*,audio/*|max:5000',
+      'media' => 'mimetypes:video/*,image/*,audio/*',
     ]);
     if ($validator->fails()) {
       return $validator->errors();
@@ -203,7 +203,7 @@ class EntityController extends Controller
   {
     $validator = Validator::make($request->all(), [
       'question' => 'required',
-      'media' => 'mimetypes:video/*,image/*,audio/*|max:5000',
+      'media' => 'mimetypes:video/*,image/*,audio/*',
       'a1' => 'required',
       'a2' => 'required',
       'correct' => 'required|in:a1,a2,a3,a4,a5,a6',
@@ -240,7 +240,7 @@ class EntityController extends Controller
   {
     $validator = Validator::make($request->all(), [
       'theory' => 'required',
-      'media' => 'mimetypes:video/*,image/*,audio/*|max:5000',
+      'media' => 'mimetypes:video/*,image/*,audio/*',
     ]);
     if ($validator->fails()) {
       return $validator->errors();

@@ -105,4 +105,16 @@ class YclassController extends Controller
       "status" => $updated
     ]);
   }
+
+  // Play
+  public function getInfoClassByCode($code)
+  {
+    $data = Yclass::where([
+      ["code", "=", $code]
+    ])->select('id', 'title', 'description')->first();
+    return response()->json([
+      "status" => true,
+      "data" => $data
+    ]);
+  }
 }

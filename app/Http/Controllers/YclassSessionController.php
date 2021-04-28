@@ -101,4 +101,14 @@ class YclassSessionController extends Controller
       $updated = YclassSession::updateIndexEntity($request->get('myid'), $id, $request->nextEntity);
       return response()->json($updated);
     }
+
+    // Play
+    public function playSingleSession(Request $request)
+    {
+      $data = YclassSession::playSingleSession($request->get('myidsession'));
+      return response()->json([
+        "status" => true,
+        "data" => $data
+      ]);
+    }
 }

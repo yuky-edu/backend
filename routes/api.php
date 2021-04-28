@@ -33,12 +33,19 @@ Route::group([
   Route::post('/player/join', 'PlayerController@joinClass');
   Route::post('/player/register', 'PlayerController@register');
 
+  // Yclass
+  Route::get('/yclass/code/{code}', 'YclassController@getInfoClassByCode');
+
   Route::group([
     "middleware" => "PlayerMiddleware"
   ], function() {
     // Player
+    Route::get('/player/myInfo', 'PlayerController@myInfo');
     Route::post('/player/update', 'PlayerController@updatePlayer');
     Route::get('/player/countMyFriend', 'PlayerController@countMyFriend');
+
+    // Yclass Session
+    Route::get('/yclass_session/mysession', 'YclassSessionController@playSingleSession');
   });
 });
 

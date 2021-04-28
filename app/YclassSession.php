@@ -77,4 +77,12 @@ class YclassSession extends Model
         "index" => $nextIndex
       ];
     }
+
+    // Play
+    static function playSingleSession($id)
+    {
+      return YclassSession::with('yclass:id,title,description,code')->where([
+        ["id", "=", $id]
+      ])->first();
+    }
 }

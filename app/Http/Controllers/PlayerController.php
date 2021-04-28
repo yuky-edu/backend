@@ -27,6 +27,14 @@ class PlayerController extends Controller
       ]);
     }
 
+    public function kick(Request $request, $id)
+    {
+      $removed = Player::removeById($request->get('myid'), $id);
+      return response()->json([
+        "status" => $removed
+      ]);
+    }
+
     // Play
     public function register(Request $request)
     {
@@ -51,14 +59,6 @@ class PlayerController extends Controller
       return response()->json([
         "status" => $status,
         "data" => $stored
-      ]);
-    }
-
-    public function kick(Request $request, $id)
-    {
-      $removed = Player::removeById($request->get('myid'), $id);
-      return response()->json([
-        "status" => $removed
       ]);
     }
 
@@ -145,7 +145,19 @@ class PlayerController extends Controller
       ])->select('id')->get()->count();
       return response()->json([
         "status" => true,
-        "total" => $count
+        "total" => $count-1
+      ]);
+    }
+
+    public function myInfo(Request $request)
+    {
+      $data = Player::where([
+        ["id", "=", $request->get('myid')]
+      ])->select('id', 'name', 'avatar')->first();
+      if ($data) $data->avatar = env('APP_URL').'/img/avatar/'.$data->avatar;
+      return response()->json([
+        "status" => true,
+        "data" => $data
       ]);
     }
 }
