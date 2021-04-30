@@ -54,6 +54,9 @@ class YclassController extends Controller
       ["user", "=", $request->get("myid")]
     ];
     $data = Yclass::getAll($where);
+    foreach ($data as $value) {
+      $value->category->image = env('APP_URL').'/img/category/'.$value->category->image;
+    }
     return response()->json([
       "status" => true,
       "data" => $data

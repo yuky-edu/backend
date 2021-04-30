@@ -18,6 +18,7 @@ class Players extends Migration
             $table->unsignedBigInteger('yclass_session');
             $table->string('name')->nullable()->default(null);
             $table->text('photo');
+            $table->integer('score')->default(0);
             $table->string('token')->unique();
             $table->timestamps();
 

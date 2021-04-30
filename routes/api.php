@@ -46,6 +46,11 @@ Route::group([
 
     // Yclass Session
     Route::get('/yclass_session/mysession', 'YclassSessionController@playSingleSession');
+
+    // Player Answer
+    Route::post('/player_answer', 'PlayerAnswerController@store');
+    Route::delete('/player_answer/{id}', 'PlayerAnswerController@destroyAnswer');
+
   });
 });
 
@@ -98,4 +103,8 @@ Route::group([
   // Player
   Route::delete('/player/{id}', 'PlayerController@kick');
   Route::get('/player/session/{id_session}', 'PlayerController@getPlayersBySession');
+
+  // PlayerAnswer
+  Route::get('/player_answer/entity/{id_entity}', 'PlayerAnswerController@getByIdEntity');
+
 });
