@@ -16,13 +16,14 @@ class PlayerAnswerController extends Controller
     public function getByIdEntity(Request $request, $id)
     {
       $user = $request->get('myid');
-      $datas = PlayerAnswer::with('entity_correct', 'entity_correct.yclass:id,user')->whereHas('entity_correct.yclass', function($q) use($user) {
+      $datas = PlayerAnswer::with('entity_correct', 'player_info:id,name,avatar', 'entity_correct.yclass:id,user')->whereHas('entity_correct.yclass', function($q) use($user) {
         $q->where('user', '=', $user);
       })->where([
         ["entity", "=", $id]
       ])->get();
       $pos = 1;
       foreach($datas as $data) {
+        $data->player_info->avatar = env('APP_URL').'/img/avatar/'.$data->player_info->avatar;
         if ($data->entity_correct->correct == $data->answer) {
           $data->score = $this->scoreFormula($pos, $datas->count());
           $data->correct = true;
@@ -65,6 +66,16 @@ class PlayerAnswerController extends Controller
       $deleted = PlayerAnswer::destroyAnswer($user, $id);
       return response()->json([
         "status" => $deleted
+      ]);
+    }
+
+    public function getByPlayerAndEntity(Request $request, $id)
+    {
+      $user = $request->get('myid');
+      $selected = PlayerAnswer::getByPlayerAndEntity($user, $id);
+      return response()->json([
+        "status" => true,
+        "data" => $selected
       ]);
     }
 }

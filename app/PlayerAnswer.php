@@ -10,7 +10,7 @@ class PlayerAnswer extends Model
     'player',	'entity',	'answer'
   ];
 
-  public function player()
+  public function player_info()
   {
     return $this->belongsTo('App\Player', 'player', 'id');
   }
@@ -25,6 +25,11 @@ class PlayerAnswer extends Model
     return PlayerAnswer::updateOrCreate(['player' => $player, 'entity' => $entity], [
       "answer" => $answer
     ]);
+  }
+
+  static function getByPlayerAndEntity($player, $entity)
+  {
+    return PlayerAnswer::where(['player' => $player, 'entity' => $entity]) ->first();
   }
 
   static function destroyAnswer($player, $id)

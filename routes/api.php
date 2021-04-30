@@ -50,6 +50,7 @@ Route::group([
     // Player Answer
     Route::post('/player_answer', 'PlayerAnswerController@store');
     Route::delete('/player_answer/{id}', 'PlayerAnswerController@destroyAnswer');
+    Route::get('/player_answer/entity/{id}', 'PlayerAnswerController@getByPlayerAndEntity');
 
   });
 });
