@@ -11,6 +11,7 @@ class YclassSession extends Model
       'yclass',
       'index_entity',
       'ws_channel',
+      'answered_entity',
       'status'
     ];
 
@@ -46,6 +47,23 @@ class YclassSession extends Model
       return $data->save();
     }
 
+    static function updateAnsweredEntity($user, $id, $answeredEntity)
+    {
+      $data = YclassSession::with('yclass:id,user')->whereHas('yclass', function($q) use($user) {
+        $q->where("user", "=", $user);
+      })->where([
+        ["id", "=", $id]
+      ])->first();
+      if (!$data) return false;
+      $AE = json_decode($data->answered_entity);
+      array_push($AE, $answeredEntity);
+      $data->answered_entity = json_encode($AE);
+      return (object) [
+        "status" => $data->save(),
+        "answered_entity" => $AE
+      ];
+    }
+
     static function updateIndexEntity($user, $id, $q)
     {
       $data = YclassSession::with('yclass:id,user')->whereHas('yclass', function($q) use($user) {
@@ -74,7 +92,8 @@ class YclassSession extends Model
       $data->index_entity = $nextIndex;
       return (object) [
         "status" => $data->save(),
-        "index" => $nextIndex
+        "index" => $nextIndex,
+        "answered_entity" => $data->answered_entity
       ];
     }
 

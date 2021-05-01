@@ -7,12 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 class Player extends Model
 {
   protected $fillable = [
-    	'yclass_session',	'name',	'avatar',	'token'
+    	'yclass_session',	'name',	'avatar',	'token', 'score'
   ];
 
   public function yclass_session()
   {
     return $this->belongsTo('App\YclassSession', 'yclass_session', 'id');
+  }
+
+  public function answer()
+  {
+    return $this->hasMany('App\PlayerAnswer', 'player', 'id');
   }
 
   static function register($yclass_session_id, $name, $avatar)
@@ -36,14 +41,14 @@ class Player extends Model
     return $data->delete();
   }
 
-  static function updatePlayer($id, $key = [])
+  static function updatePlayer($user, $id, $key = [])
   {
     $data = Player::where([
       ["id", "=", $id]
-    ])->select('id', 'name', 'avatar')->first();
+    ])->select('id', 'name', 'avatar', 'score')->first();
     if (!$data) return false;
-    if (isset($key['name'])) $data->name = $key['name'];
-    if (isset($key['photoName'])) $data->avatar = $key['photoName'];
+    $score = $data->score + $key["score"];
+    $data->score = $score;
     return $data->save();
   }
 }

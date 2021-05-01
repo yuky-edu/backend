@@ -39,6 +39,18 @@ class PlayerAnswerController extends Controller
       ]);
     }
 
+    public function getIdPlayerWhoAnsweredByIdEntity(Request $request, $id_entity)
+    {
+      $user = $request->get('myid');
+      $datas = PlayerAnswer::where([
+        ["entity", "=", $id_entity]
+      ])->select('id', 'player')->get();
+      return response()->json([
+        "status" => true,
+        "data" => $datas
+      ]);
+    }
+
     // Plays
     public function store(Request $request)
     {
@@ -76,6 +88,26 @@ class PlayerAnswerController extends Controller
       return response()->json([
         "status" => true,
         "data" => $selected
+      ]);
+    }
+
+    public function getMyAnswerBySession(Request $request, $id_session)
+    {
+      $user = $request->get('myid');
+      $datas = PlayerAnswer::with('player_info:id,yclass_session', 'entity_correct')->whereHas('player_info', function ($q) use($id_session) {
+        $q->where('yclass_session', '=', $id_session);
+      })->get();
+      foreach($datas as $data) {
+        if ($data->entity_correct->correct == $data->answer) {
+          $data->correct = true;
+        }
+        else {
+          $data->correct = false;
+        }
+      }
+      return response()->json([
+        "status" => true,
+        "data" => $datas
       ]);
     }
 }

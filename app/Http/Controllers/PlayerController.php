@@ -35,6 +35,23 @@ class PlayerController extends Controller
       ]);
     }
 
+    public function getLeaderboardByIdSession(Request $request, $id_session)
+    {
+      $user = $request->get('myid');
+      $data = Player::with('yclass_session:id,yclass', 'yclass_session.yclass:id,user')->whereHas('yclass_session.yclass', function($q) use($user) {
+        $q->where('user', '=', $user);
+      })->where([
+        ["yclass_session", "=", $id_session]
+      ])->orderBy('score', 'DESC')->select('id', 'yclass_session', 'name', 'avatar', 'score')->get();
+      foreach ($data as $value) {
+        $value->avatar = env('APP_URL').'/img/avatar/'.$value->avatar;
+      }
+      return response()->json([
+        "status" => true,
+        "data" => $data
+      ]);
+    }
+
     // Play
     public function register(Request $request)
     {
@@ -104,7 +121,6 @@ class PlayerController extends Controller
           break;
       }
       if ($dataYclass) {
-        // $player = $this->register($request->playerName, $dataYclass->last_session->id);
         return response()->json([
           "status" => true,
           "data" => [
@@ -117,22 +133,9 @@ class PlayerController extends Controller
       ]);
     }
 
-    public function updatePlayer(Request $request)
+    public function addScore($id, Request $request)
     {
-      $validator = Validator::make($request->all(), [
-        'name' => 'required',
-        'avatar' => 'mimetypes:image/*'
-      ]);
-      if ($validator->fails()) {
-        return $validator->errors();
-      }
-      if ($request->has('avatar')) {
-        $photoFile = $request->avatar;
-        $photo = date('dmyhis').$photoFile->getClientOriginalName();
-        $photoFile->move('img/avatar', $photo);
-        $request->merge(["photoName" => $photo]);
-      }
-      $updated = Player::updatePlayer($request->get('myid'), $request->all());
+      $updated = Player::updatePlayer($request->get('myid'), $id, $request->all());
       return response()->json([
         "status" => $updated
       ]);

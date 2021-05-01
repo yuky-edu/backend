@@ -93,6 +93,21 @@ class YclassSessionController extends Controller
      ]);
     }
 
+    public function updateAnsweredEntity(Request $request, $id)
+    {
+      $validator = Validator::make($request->all(), [
+        'answered_entity' => 'required'
+      ]);
+      if ($validator->fails()) {
+        return $validator->errors();
+      }
+     $updated = YclassSession::updateAnsweredEntity($request->get('myid'), $id, $request->answered_entity);
+     return response()->json([
+       "status" => $updated->status,
+       "answered_entity" => $updated->answered_entity
+     ]);
+    }
+
     public function updateIndexEntity(Request $request, $id)
     {
       $validator = Validator::make($request->all(), [

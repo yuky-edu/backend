@@ -17,8 +17,9 @@ class YclassSessions extends Migration
             $table->id();
             $table->unsignedBigInteger('yclass');
             $table->integer('index_entity')->default(0);
-            $table->enum('status', ['off', 'wait', 'playing'])->default('wait');
+            $table->enum('status', ['off', 'wait', 'on_mode_block', 'on_mode_play'])->default('wait');
             $table->string("ws_channel")->unique();
+            $table->string("answered_entity")->default('[]');
             $table->timestamps();
 
             $table->foreign("yclass")->references("id")->on("yclasses")->onDelete("cascade");

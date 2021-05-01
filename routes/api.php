@@ -41,7 +41,6 @@ Route::group([
   ], function() {
     // Player
     Route::get('/player/myInfo', 'PlayerController@myInfo');
-    Route::post('/player/update', 'PlayerController@updatePlayer');
     Route::get('/player/countMyFriend', 'PlayerController@countMyFriend');
 
     // Yclass Session
@@ -51,6 +50,7 @@ Route::group([
     Route::post('/player_answer', 'PlayerAnswerController@store');
     Route::delete('/player_answer/{id}', 'PlayerAnswerController@destroyAnswer');
     Route::get('/player_answer/entity/{id}', 'PlayerAnswerController@getByPlayerAndEntity');
+    Route::get('/player_answer/session/{id_session}', 'PlayerAnswerController@getMyAnswerBySession');
 
   });
 });
@@ -84,6 +84,7 @@ Route::group([
   Route::get('/yclass_session/single', 'YclassSessionController@getSingle');
   Route::put('/yclass_session/{id}', 'YclassSessionController@updateSession');
   Route::put('/yclass_session/{id}/entity', 'YclassSessionController@updateIndexEntity');
+  Route::put('/yclass_session/{id}/answeredEntity', 'YclassSessionController@updateAnsweredEntity');
 
   // Entity
   Route::post('/entity/question', 'EntityController@store_question');
@@ -104,8 +105,11 @@ Route::group([
   // Player
   Route::delete('/player/{id}', 'PlayerController@kick');
   Route::get('/player/session/{id_session}', 'PlayerController@getPlayersBySession');
+  Route::put('/player/addScore/{id}', 'PlayerController@addScore');
+  Route::get('/player/session/{id}/leaderboard', 'PlayerController@getLeaderboardByIdSession');
 
   // PlayerAnswer
   Route::get('/player_answer/entity/{id_entity}', 'PlayerAnswerController@getByIdEntity');
+  Route::get('/player_answer/entity/{id_entity}/player', 'PlayerAnswerController@getIdPlayerWhoAnsweredByIdEntity');
 
 });
