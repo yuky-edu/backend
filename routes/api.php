@@ -84,6 +84,7 @@ Route::group([
   Route::get('/yclass_session/single', 'YclassSessionController@getSingle');
   Route::put('/yclass_session/{id}', 'YclassSessionController@updateSession');
   Route::put('/yclass_session/{id}/entity', 'YclassSessionController@updateIndexEntity');
+  Route::put('/yclass_session/{id}/answeredEntity', 'YclassSessionController@updateAnsweredEntity');
   Route::delete('/yclass_session/{id}', 'YclassSessionController@deleteSession');
 
   // Entity
