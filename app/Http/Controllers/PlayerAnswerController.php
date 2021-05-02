@@ -21,16 +21,18 @@ class PlayerAnswerController extends Controller
       })->where([
         ["entity", "=", $id]
       ])->get();
-      $pos = 1;
-      foreach($datas as $data) {
-        $data->player_info->avatar = env('APP_URL').'/img/avatar/'.$data->player_info->avatar;
-        if ($data->entity_correct->correct == $data->answer) {
-          $data->score = $this->scoreFormula($pos, $datas->count());
-          $data->correct = true;
-          $pos++;
-        }
-        else {
-          $data->correct = false;
+      if ($datas) {
+        $pos = 1;
+        foreach($datas as $data) {
+          $data->player_info->avatar = env('APP_URL').'/img/avatar/'.$data->player_info->avatar;
+          if ($data->entity_correct->correct == $data->answer) {
+            $data->score = $this->scoreFormula($pos, $datas->count());
+            $data->correct = true;
+            $pos++;
+          }
+          else {
+            $data->correct = false;
+          }
         }
       }
       return response()->json([
@@ -39,10 +41,12 @@ class PlayerAnswerController extends Controller
       ]);
     }
 
-    public function getIdPlayerWhoAnsweredByIdEntity(Request $request, $id_entity)
+    public function getIdPlayerWhoAnsweredByIdEntity(Request $request, $id_entity, $id_session)
     {
       $user = $request->get('myid');
-      $datas = PlayerAnswer::where([
+      $datas = PlayerAnswer::with('player_info:id,yclass_session')->whereHas('player_info', function($q) use($id_session) {
+        $q->where('yclass_session', '=', $id_session);
+      })->where([
         ["entity", "=", $id_entity]
       ])->select('id', 'player')->get();
       return response()->json([

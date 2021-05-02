@@ -156,7 +156,7 @@ class PlayerController extends Controller
     {
       $data = Player::where([
         ["id", "=", $request->get('myid')]
-      ])->select('id', 'name', 'avatar')->first();
+      ])->select('id', 'name', 'avatar', 'score')->first();
       if ($data) $data->avatar = env('APP_URL').'/img/avatar/'.$data->avatar;
       return response()->json([
         "status" => true,
