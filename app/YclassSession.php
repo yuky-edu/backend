@@ -104,4 +104,14 @@ class YclassSession extends Model
         ["id", "=", $id]
       ])->first();
     }
+
+    static function deleteSession($user, $id)
+    {
+      $data = YclassSession::with('yclass:id,user')->whereHas('yclass', function($q) use($user) {
+        $q->where("user", "=", $user);
+      })->where([
+        ["id", "=", $id]
+      ])->first();
+      return $data->delete();
+    }
 }

@@ -117,6 +117,14 @@ class YclassSessionController extends Controller
       return response()->json($updated);
     }
 
+    public function deleteSession(Request $request, $id)
+    {
+      $deleted = YclassSession::deleteSession($request->get('myid'), $id);
+      return response()->json([
+        "status" => $deleted
+      ]);
+    }
+
     // Play
     public function playSingleSession(Request $request)
     {
