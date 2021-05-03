@@ -13,13 +13,15 @@ class PlayerAnswerController extends Controller
       return ($total/$position * 1000);
     }
 
-    public function getByIdEntity(Request $request, $id)
+    public function getByIdEntityAndSession(Request $request, $id_entity, $id_session)
     {
       $user = $request->get('myid');
-      $datas = PlayerAnswer::with('entity_correct', 'player_info:id,name,avatar', 'entity_correct.yclass:id,user')->whereHas('entity_correct.yclass', function($q) use($user) {
+      $datas = PlayerAnswer::with('entity_correct', 'player_info:id,name,avatar,yclass_session', 'entity_correct.yclass:id,user')->whereHas('entity_correct.yclass', function($q) use($user) {
         $q->where('user', '=', $user);
-      })->where([
-        ["entity", "=", $id]
+      })->whereHas('player_info', function($q) use($id_session) {
+        $q->where('yclass_session', '=', $id_session);
+      })->orderBy('id', 'ASC')->where([
+        ["entity", "=", $id_entity]
       ])->get();
       if ($datas) {
         $pos = 1;
@@ -43,7 +45,6 @@ class PlayerAnswerController extends Controller
 
     public function getIdPlayerWhoAnsweredByIdEntity(Request $request, $id_entity, $id_session)
     {
-      $user = $request->get('myid');
       $datas = PlayerAnswer::with('player_info:id,yclass_session')->whereHas('player_info', function($q) use($id_session) {
         $q->where('yclass_session', '=', $id_session);
       })->where([
@@ -100,7 +101,9 @@ class PlayerAnswerController extends Controller
       $user = $request->get('myid');
       $datas = PlayerAnswer::with('player_info:id,yclass_session', 'entity_correct')->whereHas('player_info', function ($q) use($id_session) {
         $q->where('yclass_session', '=', $id_session);
-      })->get();
+      })->where([
+        ["player", "=", $user]
+      ])->get();
       foreach($datas as $data) {
         if ($data->entity_correct->correct == $data->answer) {
           $data->correct = true;

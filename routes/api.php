@@ -110,7 +110,7 @@ Route::group([
   Route::get('/player/session/{id}/leaderboard', 'PlayerController@getLeaderboardByIdSession');
 
   // PlayerAnswer
-  Route::get('/player_answer/entity/{id_entity}', 'PlayerAnswerController@getByIdEntity');
+  Route::get('/player_answer/entity/{id_entity}/session/{id_session}', 'PlayerAnswerController@getByIdEntityAndSession');
   Route::get('/player_answer/entity/{id_entity}/session/{id_session}/player', 'PlayerAnswerController@getIdPlayerWhoAnsweredByIdEntity');
 
 });
