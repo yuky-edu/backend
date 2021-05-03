@@ -19,7 +19,7 @@ class PlayerController extends Controller
         ["yclass_session", "=", $id_session]
       ])->orderBy('id', 'DESC')->select('id', 'yclass_session', 'name', 'avatar')->get();
       foreach ($data as $value) {
-        $value->avatar = env('APP_URL').'/img/avatar/'.$value->avatar;
+        $value->avatar = config('app.url').'/img/avatar/'.$value->avatar;
       }
       return response()->json([
         "status" => true,
@@ -44,7 +44,7 @@ class PlayerController extends Controller
         ["yclass_session", "=", $id_session]
       ])->orderBy('score', 'DESC')->select('id', 'yclass_session', 'name', 'avatar', 'score')->get();
       foreach ($data as $value) {
-        $value->avatar = env('APP_URL').'/img/avatar/'.$value->avatar;
+        $value->avatar = config('app.url').'/img/avatar/'.$value->avatar;
       }
       return response()->json([
         "status" => true,
@@ -72,7 +72,7 @@ class PlayerController extends Controller
       }
       $stored = Player::register($request->id_session, $request->name, $photo);
       $status = $stored ? true : false;
-      $stored->avatar = env('APP_URL').'/img/avatar/'.$stored->avatar;
+      $stored->avatar = config('app.url').'/img/avatar/'.$stored->avatar;
       return response()->json([
         "status" => $status,
         "data" => $stored
@@ -157,7 +157,7 @@ class PlayerController extends Controller
       $data = Player::where([
         ["id", "=", $request->get('myid')]
       ])->select('id', 'name', 'avatar', 'score')->first();
-      if ($data) $data->avatar = env('APP_URL').'/img/avatar/'.$data->avatar;
+      if ($data) $data->avatar = config('app.url').'/img/avatar/'.$data->avatar;
       return response()->json([
         "status" => true,
         "data" => $data

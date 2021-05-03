@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/debug', function () {
-    return "debug";
+    return config('app.url');
 });
 Route::get('/', function () {
     return view('welcome');

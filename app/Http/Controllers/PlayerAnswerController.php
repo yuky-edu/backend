@@ -26,7 +26,7 @@ class PlayerAnswerController extends Controller
       if ($datas) {
         $pos = 1;
         foreach($datas as $data) {
-          $data->player_info->avatar = env('APP_URL').'/img/avatar/'.$data->player_info->avatar;
+          $data->player_info->avatar = config('app.url').'/img/avatar/'.$data->player_info->avatar;
           if ($data->entity_correct->correct == $data->answer) {
             $data->score = $this->scoreFormula($pos, $datas->count());
             $data->correct = true;

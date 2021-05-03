@@ -42,7 +42,7 @@ class YclassController extends Controller
       array_push($where, ["code", "=", $request->query->get('code')]);
     }
     $data = Yclass::single($where);
-    $data->category->image = env('APP_URL').'/img/category/'.$data->category->image;
+    $data->category->image = config('app.url').'/img/category/'.$data->category->image;
     return response()->json([
       "status" => true,
       "data" => $data
@@ -55,7 +55,7 @@ class YclassController extends Controller
     ];
     $data = Yclass::getAll($where);
     foreach ($data as $value) {
-      $value->category->image = env('APP_URL').'/img/category/'.$value->category->image;
+      $value->category->imageurl = config('app.url').'/img/category/'.$value->category->image;
     }
     return response()->json([
       "status" => true,

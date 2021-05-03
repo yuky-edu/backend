@@ -13,7 +13,7 @@ class YclassCategory extends Model
   static function getAll() {
     $data = YclassCategory::get();
     foreach ($data as $value) {
-      $value->image = env('APP_URL').'/img/category/'.$value->image;
+      $value->image = config('app.url').'/img/category/'.$value->image;
     }
     return $data;
   }

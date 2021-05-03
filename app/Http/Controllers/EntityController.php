@@ -66,7 +66,7 @@ class EntityController extends Controller
     $status = $stored ? true : false;
     if ($status) {
       if (isset($stored["media"])) {
-        $baseURL = env('APP_URL').'/media/question';
+        $baseURL = config('app.url').'/media/question';
         $decodeMedia = json_decode($stored["media"]);
         $decodeMedia[0] = $baseURL.'/'.$decodeMedia[0];
         $stored["media"] = $decodeMedia;
@@ -113,7 +113,7 @@ class EntityController extends Controller
     $status = $stored ? true : false;
     if ($status) {
       if (isset($stored["media"])) {
-        $baseURL = env('APP_URL').'/media/question';
+        $baseURL = config('app.url').'/media/question';
         $decodeMedia = json_decode($stored["media"]);
         $decodeMedia[0] = $baseURL.'/'.$decodeMedia[0];
         $stored["media"] = $decodeMedia;
@@ -142,10 +142,10 @@ class EntityController extends Controller
     foreach ($data as $value) {
       if (isset($value["media"])) {
         if ($value["type"] == 'q') {
-          $baseURL = env('APP_URL').'/media/question';
+          $baseURL = config('app.url').'/media/question';
         }
         elseif ($value["type"] == 't') {
-          $baseURL = env('APP_URL').'/media/theory';
+          $baseURL = config('app.url').'/media/theory';
         }
         $value["media"] = json_decode($value["media"]);
         $value["media"][0] = $baseURL.'/'.$value["media"][0];
@@ -163,10 +163,10 @@ class EntityController extends Controller
     $data = Entity::getSingleMyEntity($request->get('myid'), $id);
     if (isset($data["media"])) {
       if ($data["type"] == 'q') {
-        $baseURL = env('APP_URL').'/media/question';
+        $baseURL = config('app.url').'/media/question';
       }
       elseif ($data["type"] == 't') {
-        $baseURL = env('APP_URL').'/media/theory';
+        $baseURL = config('app.url').'/media/theory';
       }
       $data["media"] = json_decode($data["media"]);
       $data["media"][0] = $baseURL.'/'.$data["media"][0];
