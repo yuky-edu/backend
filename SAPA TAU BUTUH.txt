@@ -1,4 +1,0 @@
-$classBelonging = Question::select("yclass")->with('yclass:id,user')->whereHas('yclass', function ($query) use($request) {
-  $query->where('user', '=', $request->get('myid'));
-  $query->where('id', '=', $request->id_yclass);
-})->first();
